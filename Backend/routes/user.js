@@ -1,6 +1,8 @@
 const router= require("express").Router();
 const User=require("../models/user");
 const bcrypt=require("bcryptjs");
+const jwt=require("jsonwebtoken");
+const {authenticateToken}=require("./userAuth");
 
 //sign up
 router.post('/sign-up',async(req,res)=>{
@@ -54,7 +56,7 @@ router.post("/sign-in",async(req,res)=>{
    try{
       const {username,password}=req.body;
 
-      //chech if user exists
+      //check if user exists
       const existingUser=await User.findOne({username});
       if(!existingUser){
          return res.status(400).json({message:"Invalid Credentials"});
@@ -63,7 +65,14 @@ router.post("/sign-in",async(req,res)=>{
       //compare passwords
       const isMatched= await bcrypt.compare(password, existingUser.password);
          if(isMatched){
-            res.status(200).json({message:"SignIn success"});
+
+            //creating Jwt token
+            const token=jwt.sign({userID:existingUser._id,username:existingUser.username},process.env.JWT_SECRET,
+            {expiresIn:"1h"}
+            );
+            res.status(200).json({message:"SignIn success",
+               token:token,
+            });
          }else{
             res.status(400).json({message:"Invalid Credentials"});
          }
@@ -73,5 +82,30 @@ router.post("/sign-in",async(req,res)=>{
    }
 });
 
+router.get("/get-user-informtaion",authenticateToken,async(req,res)=>{
+   try{
+     const{id}=req.headers;
+     const userData=await User.findById(id).select('-password');
+     return res.status(200).json({userData});
 
+   }catch(error){
+      console.log("error during getting user info");
+      res.status(500).json({message:"Internal server error"});
+   }
+});
+
+router.put("/update-address",authenticateToken,async(req,res)=>{
+   try{
+     const {newAddress}=req.body;
+     
+     const {id}=req.headers;
+     const updatedUser= await User.findByIdAndUpdate(id,{address:newAddress},{ new: true });
+     console.log("newaddress:",newAddress);
+     if(!updatedUser)  return res.status(404).json({ message: "User not found" });
+     res.status(200).json({message:"Address updated Successfully"});
+   }catch(error){
+      console.log("error during updating the useraddress");
+      res.status(500).json({message:"Internal server error"});
+   }
+});
 module.exports=router;
