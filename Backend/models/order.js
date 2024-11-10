@@ -10,7 +10,7 @@ const order = new mongoose.Schema({
         ref: "books",
     },
     staus: {
-        type: string,
+        type: tSring,
         default: "Order Placed",
         enum: ["OrderPlaced", "Out For Delivery", "Delivered", "Canceled"]
     },

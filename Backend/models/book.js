@@ -2,15 +2,15 @@ const mongoose = require("mongoose");
 
 const book = new mongoose.Schema({
     url:{
-        type:string,
+        type:String,
         required:true,
     },
     title:{
-        type:string,
+        type:String,
         required:true,
     },
     author:{
-        type:string,
+        type:String,
         required:true,
     },
     price:{
@@ -18,11 +18,11 @@ const book = new mongoose.Schema({
         required:true,
     },
     desc:{
-        type:string,
+        type:String,
         required:true,
     },
     language:{
-        type:string,
+        type:String,
         required:true,
     }
 },
