@@ -1,5 +1,4 @@
 const mongoose = require("mongoose");
-
 const order = new mongoose.Schema({
     user: {
         type: mongoose.Types.ObjectId,
@@ -10,7 +9,7 @@ const order = new mongoose.Schema({
         ref: "books",
     },
     staus: {
-        type: tSring,
+        type: String,
         default: "Order Placed",
         enum: ["OrderPlaced", "Out For Delivery", "Delivered", "Canceled"]
     },
