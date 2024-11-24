@@ -51,10 +51,10 @@ router.get("get-order-history",authenticateToken,async(req,res)=>{
 });
 
 //get all orders (admin)
-router.get("get-all-orders",authenticateToken,async(req,res)=>{
+router.get("/get-all-orders",authenticateToken,async(req,res)=>{
     try{
        const {id}=req.headers;
-       const userData=await User.find()
+       const userData=await Order.find()
        .populate({
         path:"book",
        })
