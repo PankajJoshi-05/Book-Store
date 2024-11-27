@@ -4,7 +4,7 @@ function BookCard({book}) {
     console.log(book);
   return (
     <>
-   <Link>
+   <Link to={`/view-book-details/${book._id}`}>
     <div className='text-white bg-teal-700 rounded p-4 flex flex-col'>
         <div className='bg-gradient-to-r from-gray-100 to-blue-200 rounded flex flex items-center justify-center'>
             <img src={book.url} alt="book image" className="h-[30vh]"/>

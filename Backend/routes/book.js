@@ -100,7 +100,7 @@ router.delete("/delete-book",authenticateToken,async(req,res)=>{
 });
 
 // get all books 
-router.get("/get-all-books",authenticateToken,async(req,res)=>{
+router.get("/get-all-books",async(req,res)=>{
     try{
         //find the books and sorting them by the createdAt field 
        const books=await Book.find().sort({createdAt:-1});
