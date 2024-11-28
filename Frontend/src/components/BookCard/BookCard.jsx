@@ -1,7 +1,6 @@
 import React from 'react'
 import {Link} from "react-router-dom"
 function BookCard({book}) {
-    console.log(book);
   return (
     <>
    <Link to={`/view-book-details/${book._id}`}>
