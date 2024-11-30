@@ -18,7 +18,7 @@ const AboutUs = () => {
         <div className="max-w-6xl mx-auto text-center">
           <h2 className="text-3xl font-semibold text-teal-600 mb-6">Our Mission</h2>
           <p className="text-xl text-gray-700 mb-8">
-            At Book Haven, we are passionate about providing a space for book lovers of all kinds. Our mission is to offer a carefully curated collection of books that inspire, educate, and entertain. Whether you're a fiction enthusiast or looking for academic texts, our store is the place where your next adventure begins.
+            At BookyVerse, we are passionate about providing a space for book lovers of all kinds. Our mission is to offer a carefully curated collection of books that inspire, educate, and entertain. Whether you're a fiction enthusiast or looking for academic texts, our store is the place where your next adventure begins.
           </p>
         </div>
       </section>

@@ -7,7 +7,7 @@ const {authenticateToken}=require("./userAuth");
 //sign up
 router.post('/sign-up',async(req,res)=>{
     try{
-     const{username,email,password,address}=req.body;
+     const{username,email,password}=req.body;
 
     //checking for unique username
      const existingUserName = await User.findOne({username:username});
@@ -35,7 +35,6 @@ router.post('/sign-up',async(req,res)=>{
         username:username,
         email:email,
         password:hashedPassword,
-        address:address,
      });
 
      //saving the new user to the database
@@ -72,6 +71,8 @@ router.post("/sign-in",async(req,res)=>{
             );
             res.status(200).json({message:"SignIn success",
                token:token,
+               role:existingUser.role,
+               id:existingUser._id
             });
          }else{
             res.status(400).json({message:"Invalid Credentials"});

@@ -82,3 +82,14 @@
 .nav-links:hover::before{
     left:0;
  }
+
+
+
+.profile-link {
+    background: linear-gradient(120deg, rgb(0, 148, 140), rgb(0, 112, 101));
+    color: white; 
+    border-radius: 6px; 
+    padding: 8px 16px; } 
+  
+ 
+  

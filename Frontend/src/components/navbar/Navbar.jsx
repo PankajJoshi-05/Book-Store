@@ -3,6 +3,7 @@ import './Navbar.css'
 import { Link } from 'react-router-dom';
 import { RxHamburgerMenu } from "react-icons/rx";
 import { IoClose } from "react-icons/io5";
+import {useSelector} from "react-redux";
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const links = [
@@ -12,6 +13,13 @@ const Navbar = () => {
     { title: "Cart", link: "/cart" },
     { title: "Profile", link: "/profile" },
   ];
+   
+  const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
+console.log(isLoggedIn);
+
+if(isLoggedIn===false){
+  links.splice(3,2);
+}
 
   return (
     <>
@@ -25,25 +33,25 @@ const Navbar = () => {
 
         </div>
         <div className=' flex items-center gap-4'>
-          <div className='hidden md:flex gap-4'>
+          <div className='hidden md:flex gap-4 items-center'>
             {links.map((item, i) => (
               <Link
                 to={item.link}
                 key={i}
-                className=' nav-links text-white hover:text-teal-600 transition-all duration-300'
+                className={` nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" ? "profile-link" : ""}`}
               >
                 {item.title}
               </Link>
             ))}
           </div>
-          <div className='hidden md:flex gap-4'>
-            <Link to="sign-in" className="px-4 sign-in-btn px-2 py-1  ">
+         
+             {isLoggedIn===false &&  <div className='hidden md:flex gap-4'> <Link to="sign-in" className="px-4 sign-in-btn px-2 py-1  ">
               SignIn
             </Link>
             <Link to="sign-up" className="px-4 sign-up-btn px-2 py-1 bg-teal-600 text-white rounded ">
               SignUp
-            </Link>
-          </div>
+            </Link></div>}
+          
           <button onClick={() => setMenuOpen(!menuOpen)} className='md:hidden'><RxHamburgerMenu />
           </button>
         </div>
@@ -57,17 +65,18 @@ const Navbar = () => {
         </button>
 
         <div className='mt-10 flex flex-col items-center justify-center h-[75%]'>
-          <Link to="sign-in" className=" mb-5 px-4 sign-in-btn px-2 py-1  text-white">
+          
+          {isLoggedIn===false &&(<> <Link to="sign-in" className=" mb-5 px-4 sign-in-btn px-2 py-1  text-white">
             SignIn
           </Link>
           <Link to="sign-up" className="mb-5 px-4 sign-up-btn px-2 py-1 bg-teal-600 text-white rounded ">
             SignUp
-          </Link>
+          </Link></>)}
           {links.map((item, i) => (
             <Link
               to={item.link}
               key={i}
-              className=' mb-5 nav-links text-white hover:text-teal-600 transition-all duration-300'
+              className={`mb-5 nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" ? "profile-link" : ""}`}
             >
               {item.title}
             </Link>

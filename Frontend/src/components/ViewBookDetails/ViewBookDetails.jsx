@@ -5,7 +5,8 @@ import axios from "axios";
 import { GrLanguage } from "react-icons/gr";
 import { FaInfoCircle, FaPen, FaBook } from "react-icons/fa";
 import { FaRupeeSign } from 'react-icons/fa';
-
+import { IoMdHeart } from "react-icons/io";
+import { SlBasket } from "react-icons/sl";
 const ViewBookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
@@ -25,8 +26,24 @@ const ViewBookDetails = () => {
         <div className='min-h-screen bg-gradient-to-r from-blue-100 to-teal-200 py-8'>
           <div className='max-w-6xl mx-auto flex flex-col lg:flex-row items-center bg-white rounded-xl shadow-2xl overflow-hidden transform transition-all duration-500 hover:scale-105'>
             {/* Left section (book image) */}
-            <div className='lg:w-1/2 p-6'>
+            <div className=' flex lg:w-1/2 p-6'>
               <img src={book.url} alt="book image" className='rounded-lg shadow-xl h-[60vh] object-cover transition-transform transform hover:scale-105' />
+              <div className='flex flex-col space-y-4 m-auto ml-4'>
+                {/* Add to fav Button */}
+                <button
+                  className='flex items-center justify-center  bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                >
+                  <IoMdHeart size={28} />
+                </button>
+
+                {/* Add to cart Button */}
+                <button
+                  className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                >
+                  <SlBasket size={28} />
+                </button>
+              </div>
+
             </div>
 
             {/* Right section (book details) */}
