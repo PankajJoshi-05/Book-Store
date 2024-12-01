@@ -95,17 +95,48 @@ router.get("/get-user-informtaion",authenticateToken,async(req,res)=>{
    }
 });
 
-router.put("/update-address",authenticateToken,async(req,res)=>{
+router.put("/update-profile",authenticateToken,async(req,res)=>{
    try{
-     const {newAddress}=req.body;
+     const {email,phoneNumber,address,avatar}=req.body;
      
      const {id}=req.headers;
-     const updatedUser= await User.findByIdAndUpdate(id,{address:newAddress},{ new: true });
-     console.log("newaddress:",newAddress);
+
+     let updates={};
+    
+     // Check if email is being updated and validate
+    if (email) {
+      const existingEmail = await User.findOne({ email });
+      if (existingEmail) {
+        return res.status(400).json({ message: "Email already exists" });
+      }
+      updates.email = email;
+    }
+       // Check if phone number is being updated and validate
+   if (phoneNumber) {
+         const phoneRegex = /^[0-9]{10}$/; // Simple phone number format check (10 digits)
+         if (!phoneRegex.test(phoneNumber)) {
+           return res.status(400).json({ message: "Invalid phone number format" });
+         }
+         updates.phoneNumber = phoneNumber;
+       }
+     // Validate and update address
+     if (address) {
+      const { street, city, state, postalCode, country } = address;
+      if (!street || !city || !state || !postalCode || !country) {
+        return res.status(400).json({ message: "Complete address is required" });
+      }
+      updates.address = address;
+    }
+       // Update avatar if provided
+       if (avatar) {
+         updates.avatar = avatar;
+       }
+     const updatedUser= await User.findByIdAndUpdate(id,updates,{ new: true });
+     console.log("newaddress:",address);
      if(!updatedUser)  return res.status(404).json({ message: "User not found" });
-     res.status(200).json({message:"Address updated Successfully"});
+     res.status(200).json({message:"Profile updated Successfully"});
    }catch(error){
-      console.log("error during updating the useraddress");
+      console.log("error during updating the Profile",error);
       res.status(500).json({message:"Internal server error"});
    }
 });

@@ -3,14 +3,20 @@ import { useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import axios from "axios";
 import { GrLanguage } from "react-icons/gr";
-import { FaInfoCircle, FaPen, FaBook } from "react-icons/fa";
-import { FaRupeeSign } from 'react-icons/fa';
+import { FaInfoCircle, FaPen, FaBook, FaEdit, FaRupeeSign } from "react-icons/fa";
 import { IoMdHeart } from "react-icons/io";
 import { SlBasket } from "react-icons/sl";
+import { MdDelete } from "react-icons/md";
+
+import { useSelector } from 'react-redux';
 const ViewBookDetails = () => {
   const { id } = useParams();
   const [book, setBook] = useState(null);
 
+  const isLoggedIn = useSelector((state) => (state.auth.isLoggedIn));
+  const role = useSelector((state) => (state.auth.role));
+  console.log(isLoggedIn);
+  console.log(role);
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get(`http://localhost:1000/api/v1/get-book-by-id/${id}`);
@@ -18,7 +24,20 @@ const ViewBookDetails = () => {
     };
     fetch();
   }, [id]);
-
+   
+  const headers={
+    id:localStorage.getItem("id"),
+    authorization:`Bearer ${localStorage.getItem("token")}`,
+    bookid:id,
+};
+  const handleFavourite=async (e)=>{
+      const res=await axios.put("http://localhost:1000/api/v1/add-book-to-fav",{},{headers})
+     alert(res.data.message);
+  } 
+  const handleAddToCart=async()=>{
+    const res=await axios.put("http://localhost:1000/api/v1/add-book-to-cart",{},{headers})
+    alert(res.data.message);
+  }
   return (
     <>
       {!book && <div><Loader /></div>}
@@ -28,24 +47,45 @@ const ViewBookDetails = () => {
             {/* Left section (book image) */}
             <div className=' flex lg:w-1/2 p-6'>
               <img src={book.url} alt="book image" className='rounded-lg shadow-xl h-[60vh] object-cover transition-transform transform hover:scale-105' />
-              <div className='flex flex-col space-y-4 m-auto ml-4'>
-                {/* Add to fav Button */}
-                <button
-                  className='flex items-center justify-center  bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
-                >
-                  <IoMdHeart size={28} />
-                </button>
 
-                {/* Add to cart Button */}
-                <button
-                  className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
-                >
-                  <SlBasket size={28} />
-                </button>
-              </div>
+              {(isLoggedIn && role === "admin") && (
+                <div className='flex flex-col space-y-4 m-auto ml-4'>
+                  {/* Edit Book */}
+                  <button
+                    className='flex items-center justify-center  bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                  >
+                    <FaEdit size={28} />
+                  </button>
 
+                  {/* Delete  Book */}
+                  <button
+                    className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                  >
+                    <MdDelete size={28} />
+                  </button>
+                </div>
+              )}
+
+              {(isLoggedIn && role === "user") && (
+                <div className='flex flex-col space-y-4 m-auto ml-4'>
+                  {/* Add to fav Button */}
+                  <button
+                    className='flex items-center justify-center  bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110' onClick={handleFavourite}
+                  >
+                    <IoMdHeart size={28} />
+                  </button>
+
+                  {/* Add to cart Button */}
+                  <button
+                    className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110' onClick={handleAddToCart}
+                  >
+                    <SlBasket size={28} />
+                  </button>
+                </div>
+              )}
+
+              <div className="ml-20 w-px bg-teal-200 hidden lg:block mx-4"></div>
             </div>
-
             {/* Right section (book details) */}
             <div className='lg:w-1/2 p-6'>
               <h1 className='text-4xl font-extrabold text-gray-800 flex items-center mb-6'>

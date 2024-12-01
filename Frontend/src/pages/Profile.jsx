@@ -16,7 +16,7 @@ function Profile() {
          const res=await axios.get("http://localhost:1000/api/v1/get-user-informtaion",{
           headers
          });
-         setProfile(res.data);
+         setProfile(res.data.userData);
      };
      fetchUserInfo();
   },[])

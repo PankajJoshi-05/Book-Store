@@ -17,7 +17,6 @@ const SignIn = () => {
   }
   const submit=async (e)=>{
     e.preventDefault()
-    console.log(values);
       try{
          if(values.username===""||values.password===""){
           alert("All filelds are required");
