@@ -59,10 +59,9 @@ router.get("/get-user-cart",authenticateToken,async(req,res)=>{
     try{
         const {id}=req.headers;
         const userData=await User.findById(id).populate("cart");
-        console.log(userData);
         // fetch the cart according to recently added
         const cart=userData.cart;
-        console.log(cart);
+        
        //  return success
         return res.status(200).json({
           data:cart

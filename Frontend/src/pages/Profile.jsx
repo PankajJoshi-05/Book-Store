@@ -21,7 +21,7 @@ function Profile() {
      fetchUserInfo();
   },[])
   return (
-    <div className='bg-teal-600 h-screen px-2 md:12 flex flex-col md:flex-row py-8 gap-4 text-white '>
+    <div className='bg-teal-600 px-2 md:12 flex flex-col md:flex-row py-8 gap-4 text-white h-auto'>
     {!profile?
     (
       <div className='flex w-full h-[100%] justify-center'>
