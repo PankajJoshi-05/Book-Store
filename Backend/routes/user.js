@@ -50,7 +50,6 @@ router.post('/sign-up',async(req,res)=>{
 
 
 //sign in 
-
 router.post("/sign-in",async(req,res)=>{
    try{
       const {username,password}=req.body;
@@ -97,20 +96,13 @@ router.get("/get-user-informtaion",authenticateToken,async(req,res)=>{
 
 router.put("/update-profile",authenticateToken,async(req,res)=>{
    try{
-     const {email,phoneNumber,address,avatar}=req.body;
+     const {phoneNumber,address,avatar}=req.body;
      
      const {id}=req.headers;
 
      let updates={};
     
-     // Check if email is being updated and validate
-    if (email) {
-      const existingEmail = await User.findOne({ email });
-      if (existingEmail) {
-        return res.status(400).json({ message: "Email already exists" });
-      }
-      updates.email = email;
-    }
+
        // Check if phone number is being updated and validate
    if (phoneNumber) {
          const phoneRegex = /^[0-9]{10}$/; // Simple phone number format check (10 digits)

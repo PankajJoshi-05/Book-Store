@@ -2,7 +2,7 @@ const {authenticateToken}=require("./userAuth");
 const Book =require("../models/book");
 const Order=require("../models/order");
 const User=require("../models/user");
-
+const router=require("express").Router();
 //place order
 router.post("/place-order",authenticateToken,async(req,res)=>{
    try{
@@ -22,7 +22,7 @@ router.post("/place-order",authenticateToken,async(req,res)=>{
         });
       }
         return res.status(200).json({
-           message:"Order Placed successfully"
+           message:"Order Placed successfully",
         });
    }catch(error){
       console.log("Error during placing order",error);
@@ -31,7 +31,7 @@ router.post("/place-order",authenticateToken,async(req,res)=>{
 });
 
 //get order history of particular user
-router.get("get-order-history",authenticateToken,async(req,res)=>{
+router.get("/get-order-history",authenticateToken,async(req,res)=>{
     try{
        const {id}=req.headers;
        const userData=await User.findById(id).populate({
@@ -41,7 +41,7 @@ router.get("get-order-history",authenticateToken,async(req,res)=>{
        
        const orderData=userData.orders.reverse();
        return res.json({
-        ststus:"Success",
+        status:"Success",
         data:orderData,
        });
     }catch(error){

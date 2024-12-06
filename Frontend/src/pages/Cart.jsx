@@ -71,7 +71,7 @@ function Cart() {
 
       {/* Cart with items */}
       {cart && cart.length > 0 && (
-        <div className='h-[100vh]'>
+        <div className='min-h-screen h-auto'>
           <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
           <div className="space-y-4">
             {cart.map((item, index) => (

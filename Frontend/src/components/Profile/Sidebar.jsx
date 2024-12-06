@@ -1,13 +1,24 @@
 import React from 'react';
 import { FaPhoneAlt, FaHome, FaEnvelope, FaUser, FaHeart, FaHistory, FaCog,FaSignOutAlt } from 'react-icons/fa';
-import { Link } from "react-router-dom"
-
+import { Link, useNavigate } from "react-router-dom"
+import {useDispatch} from "react-redux"
+import {authActions} from "../../store/auth"
 function Sidebar({ profileData }) {
+  const dispatch=useDispatch();
+  const navigate=useNavigate();
+  const handleLogOut=()=>{
+    dispatch(authActions.logout());
+    dispatch(authActions.changeRole("user"));
+    localStorage.clear("token");
+    localStorage.clear("role");
+    localStorage.clear("id");
+    navigate("/");
+  }
   return (
-    <div className='bg-teal-500 p-6 rounded-xl flex flex-col items-center justify-between shadow-lg h-[100%]'>
+    <div className='bg-teal-500 p-6 rounded-xl flex flex-col items-center justify-between shadow-lg h-full'>
       <div className='flex flex-col justify-center items-center'>
         <img
-          src={profileData.avatar}
+          src={profileData.avatar || "default-avatar-url.jpg"}
           className='h-[15vh] w-[15vh] rounded-full border-4 border-teal-200 mb-4'
           alt="Profile Avatar"
         />
@@ -42,7 +53,13 @@ function Sidebar({ profileData }) {
         <div className="flex items-center space-x-2 mt-4">
           <FaHome className="text-white text-2xl" />
           {profileData.address ? (
-            <p className="text-white">{profileData.address}</p>
+            <div>
+            <p className="text-white">{profileData.address.street}</p>
+            <p className="text-white">{profileData.address.city}</p>
+            <p className="text-white">{profileData.address.state}</p>
+            <p className="text-white">{profileData.address.country}</p>
+            <p className="text-white">{profileData.address.postalCode}</p>
+            </div>
           ) : (
             <div className="relative flex items-center space-x-2">
               <span className="text-gray-700 text-sm font-semibold animate-pulse">
@@ -91,9 +108,7 @@ function Sidebar({ profileData }) {
       <div className="mt-6">
         <button
           className="flex items-center space-x-2 text-white text-lg font-semibold hover:text-teal-200 transition transform duration-300 hover:scale-105"
-          onClick={() => {
-            console.log("Logging out...");
-          }}
+          onClick={handleLogOut}
         >
           <FaSignOutAlt className="text-white text-xl" />
           <span>Log Out</span>
