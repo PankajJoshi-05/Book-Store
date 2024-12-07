@@ -82,7 +82,7 @@ router.post("/sign-in",async(req,res)=>{
    }
 });
 
-router.get("/get-user-informtaion",authenticateToken,async(req,res)=>{
+router.get("/get-user-information",authenticateToken,async(req,res)=>{
    try{
      const{id}=req.headers;
      const userData=await User.findById(id).select('-password');
@@ -96,8 +96,9 @@ router.get("/get-user-informtaion",authenticateToken,async(req,res)=>{
 
 router.put("/update-profile",authenticateToken,async(req,res)=>{
    try{
-     const {phoneNumber,address,avatar}=req.body;
-     
+      console.log(req.body);
+      
+     const {phoneNumber,address}=req.body;
      const {id}=req.headers;
 
      let updates={};
@@ -112,6 +113,7 @@ router.put("/update-profile",authenticateToken,async(req,res)=>{
          updates.phoneNumber = phoneNumber;
        }
      // Validate and update address
+     
      if (address) {
       const { street, city, state, postalCode, country } = address;
       if (!street || !city || !state || !postalCode || !country) {
@@ -119,12 +121,10 @@ router.put("/update-profile",authenticateToken,async(req,res)=>{
       }
       updates.address = address;
     }
-       // Update avatar if provided
-       if (avatar) {
-         updates.avatar = avatar;
-       }
+    
+      console.log(address);
      const updatedUser= await User.findByIdAndUpdate(id,updates,{ new: true });
-     console.log("newaddress:",address);
+     console.log(updatedUser);
      if(!updatedUser)  return res.status(404).json({ message: "User not found" });
      res.status(200).json({message:"Profile updated Successfully"});
    }catch(error){

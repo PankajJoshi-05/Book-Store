@@ -33,8 +33,8 @@ function UserOrderHistory() {
         return 'bg-blue-100 text-blue-600';  
       case 'Delivered':
         return 'bg-green-100 text-green-600';  
-      case 'Order Placed':
-        return 'bg-teal-100 text-teal-600'; 
+      case 'OrderPlaced':
+        return 'bg-teal-100 text-teal-800'; 
       case 'Cancelled':
         return 'bg-red-100 text-red-600'; 
       default:

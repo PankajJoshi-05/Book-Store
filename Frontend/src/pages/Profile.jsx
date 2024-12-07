@@ -13,7 +13,7 @@ function Profile() {
   };
   useEffect(()=>{
      const fetchUserInfo=async()=>{
-         const res=await axios.get("http://localhost:1000/api/v1/get-user-informtaion",{
+         const res=await axios.get("http://localhost:1000/api/v1/get-user-information",{
           headers
          });
          setProfile(res.data.userData);

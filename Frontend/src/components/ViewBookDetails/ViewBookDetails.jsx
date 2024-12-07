@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
 import Loader from '../Loader/Loader';
 import axios from "axios";
 import { GrLanguage } from "react-icons/gr";
@@ -9,14 +9,15 @@ import { SlBasket } from "react-icons/sl";
 import { MdDelete } from "react-icons/md";
 
 import { useSelector } from 'react-redux';
+
 const ViewBookDetails = () => {
+
   const { id } = useParams();
   const [book, setBook] = useState(null);
 
   const isLoggedIn = useSelector((state) => (state.auth.isLoggedIn));
   const role = useSelector((state) => (state.auth.role));
-  console.log(isLoggedIn);
-  console.log(role);
+  const navigate=useNavigate();
   useEffect(() => {
     const fetch = async () => {
       const res = await axios.get(`http://localhost:1000/api/v1/get-book-by-id/${id}`);
@@ -37,6 +38,12 @@ const ViewBookDetails = () => {
   const handleAddToCart=async()=>{
     const res=await axios.put("http://localhost:1000/api/v1/add-book-to-cart",{},{headers})
     alert(res.data.message);
+  }
+
+  const handleDeleteBook=async()=>{
+    const res=await axios.delete("http://localhost:1000/api/v1/delete-book",{headers});
+    alert(res.data.message);
+    navigate("/books")
   }
   return (
     <>
@@ -60,15 +67,17 @@ const ViewBookDetails = () => {
           {(isLoggedIn && role === "admin") && (
             <div className='flex flex-col space-y-4 mt-4 lg:mt-0 lg:m-auto lg:ml-4'>
               {/* Edit Book */}
-              <button
+              <Link to={`/update-book/${id}`}
                 className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                
               >
                 <FaEdit size={28} />
-              </button>
+              </Link>
 
               {/* Delete Book */}
               <button
                 className='flex items-center justify-center bg-teal-500 text-white p-3 rounded-full shadow-md transform transition-all duration-300 ease-in-out hover:bg-teal-600 hover:scale-110'
+                onClick={handleDeleteBook}
               >
                 <MdDelete size={28} />
               </button>

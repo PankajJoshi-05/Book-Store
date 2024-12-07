@@ -64,7 +64,7 @@ router.get("/get-all-orders",authenticateToken,async(req,res)=>{
        .sort({createdAt:-1});
  
        return res.json({
-        ststus:"Success",
+        status:"Success",
         data:userData,
        });
     }catch(error){

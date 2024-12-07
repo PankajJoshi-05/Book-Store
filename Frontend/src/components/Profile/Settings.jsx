@@ -12,8 +12,7 @@ function Settings() {
       state: '',
       postalCode: '',
       country: '',
-    },
-    avatar: '',
+    }
   });
   
   const [loading, setLoading] = useState(false);
@@ -25,7 +24,7 @@ function Settings() {
   useEffect(() => {
     const fetchUserData = async () => {
       try {
-        const res = await axios.get("http://localhost:1000/api/v1/get-user-informtaion", {
+        const res = await axios.get("http://localhost:1000/api/v1/get-user-information", {
           headers,
         });
         setUser(res.data.userData); 
@@ -40,7 +39,7 @@ function Settings() {
   // Handle input change for the form
   const handleChange = (e) => {
     const { name, value } = e.target;
-
+    
     if (name.includes('address')) {
       const addressKey = name.split('.')[1];
       setUser((prevState) => ({
@@ -59,27 +58,26 @@ function Settings() {
     e.preventDefault();
     setLoading(true);
   
-    const formData = new FormData();
-    formData.append('phoneNumber', user.phoneNumber);
-    formData.append('address', JSON.stringify(user.address)); 
-  
+    const userData = {
+      phoneNumber: user.phoneNumber,
+      address: {
+         street: user.address.street,
+         city: user.address.city,
+         state: user.address.state,
+         postalCode: user.address.postalCode,
+         country: user.address.country
+      }
+   };
+   
+    console.log(userData.address);
     try {
-      const res = await axios.put('http://localhost:1000/api/v1/update-profile', formData, {
+      const res = await axios.put('http://localhost:1000/api/v1/update-profile', userData, {
         headers: {
-          'Content-Type': 'multipart/form-data',
           authorization: `Bearer ${localStorage.getItem('token')}`,
-          id: localStorage.getItem('id'),
-        },
+          id: localStorage.getItem('id')
+        }
       });
-  
-      // After successful update, update the user's avatar and other info in the state
-      const updatedAvatar = res.data.user?.avatar || ''; // Use optional chaining to prevent errors if 'user' is undefined
-      setUser({
-        ...user,
-        avatar: updatedAvatar, // Assuming the avatar URL is returned in the response
-      });
-  
-      alert('Profile updated successfully');
+      alert(res.data.message);
       setLoading(false);
     } catch (err) {
       console.error('Error updating profile:', err);

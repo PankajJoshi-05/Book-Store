@@ -7,7 +7,8 @@ const { authenticateToken } = require("./userAuth");
 // add book -(admin)
 router.post("/add-book", authenticateToken, async (req, res) => {
     try {
-        const { url, title, author, price, desc, language } = req.body;
+        console.log(req.body);
+        const { url, title, author, price, desc, language,genre} = req.body;
 
         const { id } = req.headers;
         const user = await User.findById(id);
@@ -17,7 +18,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
             return res.status(400).json({ message: "You are not authorized to add books" });
         }
         // Validate the input
-        if (!url || !title || !author || !price || !desc || !language) {
+        if (!url || !title || !author || !price || !desc || !language|| !genre) {
             return res.status(400).json({ message: "All fields are required" });
         }
 
@@ -29,6 +30,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
             price,
             desc,
             language,
+            genre,
         });
 
         // save the book to the database
@@ -43,7 +45,7 @@ router.post("/add-book", authenticateToken, async (req, res) => {
 });
 
 
-router.put("/update-book", authenticateToken, async (req, res) => {
+router.put("/update-book/:id", authenticateToken, async (req, res) => {
     try {
         const { bookid } = req.headers;
 
@@ -65,6 +67,7 @@ router.put("/update-book", authenticateToken, async (req, res) => {
         }
          // Return success message
         return res.status(200).json({ message: "Book Updated successfully" });
+        
 
     } catch (error) {
         console.log("Error during Updating book", error);

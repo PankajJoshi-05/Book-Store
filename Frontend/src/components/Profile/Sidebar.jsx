@@ -1,11 +1,13 @@
 import React from 'react';
 import { FaPhoneAlt, FaHome, FaEnvelope, FaUser, FaHeart, FaHistory, FaCog,FaSignOutAlt } from 'react-icons/fa';
+import { BiBookAdd } from 'react-icons/bi'
 import { Link, useNavigate } from "react-router-dom"
-import {useDispatch} from "react-redux"
+import {useDispatch, useSelector} from "react-redux"
 import {authActions} from "../../store/auth"
 function Sidebar({ profileData }) {
   const dispatch=useDispatch();
   const navigate=useNavigate();
+  const role=useSelector((state)=>state.auth.role);
   const handleLogOut=()=>{
     dispatch(authActions.logout());
     dispatch(authActions.changeRole("user"));
@@ -74,8 +76,8 @@ function Sidebar({ profileData }) {
 
      
 
-      {/*Navigatin links*/}
-      <div className="w-full flex flex-col items-center space-y-4">
+      {/* user Navigation links*/}
+      {role==="user" && <div className="w-full flex flex-col items-center space-y-4">
         {/* Favourites Link */}
         <Link
           to="/profile"
@@ -102,8 +104,32 @@ function Sidebar({ profileData }) {
           <FaCog className="text-white text-xl" />
           <span>Settings</span>
         </Link>
-      </div>
+      </div>}
+      
+      {/* Admin Navigation Links */}
+      { role==="admin" &&
+        <div className="w-full flex flex-col items-center space-y-4">
 
+        {/* All Order History Link */}
+        <Link
+          to="/profile"
+          className="flex items-center space-x-2 text-white text-lg font-semibold hover:text-teal-200 transition transform duration-300 hover:scale-105"
+        >
+          <FaHistory className="text-white text-xl" />
+          <span>All Orders</span>
+        </Link>
+
+         {/* Add Book Link */}
+         <Link
+          to="/profile/add-book"
+          className="flex items-center space-x-2 text-white text-lg font-semibold hover:text-teal-200 transition transform duration-300 hover:scale-105"
+        >
+          <BiBookAdd className="text-white text-xl" />
+          <span>Add Book</span>
+        </Link>
+
+      </div> 
+      }
       {/* Log out Button */}
       <div className="mt-6">
         <button

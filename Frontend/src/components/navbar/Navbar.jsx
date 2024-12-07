@@ -12,15 +12,21 @@ const Navbar = () => {
     { title: "Books", link: "/books" },
     { title: "Cart", link: "/cart" },
     { title: "Profile", link: "/profile" },
+    {title:"Admin Profile",link:"/profile"}
   ];
    
   const isLoggedIn=useSelector((state)=>state.auth.isLoggedIn);
-console.log(isLoggedIn);
 
+ const role=useSelector((state)=>state.auth.role)
 if(isLoggedIn===false){
+  links.splice(3,3);
+}
+if(isLoggedIn===true && role==="user"){
+  links.splice(5,1);
+}
+if(isLoggedIn===true && role==="admin"){
   links.splice(3,2);
 }
-
   return (
     <>
       <nav className='flex items-center justify-between bg-teal-800 text-white px-8 py-3 z-20'>
@@ -38,7 +44,7 @@ if(isLoggedIn===false){
               <Link
                 to={item.link}
                 key={i}
-                className={` nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" ? "profile-link" : ""}`}
+                className={`nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" || item.title === "Admin Profile" ? "profile-link" : ""}`}
               >
                 {item.title}
               </Link>
@@ -76,7 +82,7 @@ if(isLoggedIn===false){
             <Link
               to={item.link}
               key={i}
-              className={`mb-5 nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" ? "profile-link" : ""}`}
+              className={`mb-5 nav-links text-white hover:text-teal-400 transition-all duration-300 ${item.title === "Profile" ||item.title==="Admin Profile" ? "profile-link" : ""}`}
             >
               {item.title}
             </Link>
